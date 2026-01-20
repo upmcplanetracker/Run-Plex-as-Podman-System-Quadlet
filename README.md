@@ -1,7 +1,7 @@
 Plex Podman Quadlet Deployment
 ==============================
 
-**Disclaimer:** I am not affiliated with, associated, authorized, endorsed by, or in any way officially connected with the Plex project.
+**Disclaimer:** I am not affiliated with, associated, authorized, endorsed by, or in any way officially connected with the Plex project. This should be a drop-in replacement, but back up any config files just in case.
 
 This guide demonstrates how to turn a Plex Docker container into a **System Podman Quadlet**. Unlike standard containers, a system quadlet is managed by `systemd` and will start automatically every time your Ubuntu system boots.
 

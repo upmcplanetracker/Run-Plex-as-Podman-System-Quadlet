@@ -1,0 +1,42 @@
+[Unit]
+Description=Plex Media Server
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=docker.io/plexinc/pms-docker:latest
+ContainerName=plex
+AutoUpdate=registry
+
+# Disables the ID sandbox so the container sees host users/groups directly
+UserNS=host
+
+# USER CONFIGURATION: Replace 1000 with your actual UID/GID
+Environment=PLEX_UID=1000
+Environment=PLEX_GID=1000
+Environment=TZ=America/New_York
+Environment=VERSION=docker
+
+# Networking & Resources, adjust for your setup.
+Network=host
+ShmSize=8gb
+
+# GPU / QSV Logic: Pass through the direct render interface
+# Comment out the line below if not using hardware acceleration
+AddDevice=/dev/dri:/dev/dri
+
+# STORAGE CONFIGURATION: Replace /home/user/ with your actual paths
+Volume=/home/user/plex/config:/config
+Volume=/home/user/Videos/movies:/data/movies
+Volume=/home/user/Videos/tvshows:/data/tvshows
+# Add more volumes as needed
+
+# Temporary directory for transcoding
+Tmpfs=/transcode
+
+[Service]
+Restart=on-failure
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

@@ -24,38 +24,35 @@ Download or create the `plex.container` quadlet file. Ensure that once moved to 
 
 ### Step A: Clean up existing containers
 
-If you are currently running Plex in Docker or a manual Podman container, stop and remove it first to prevent name conflicts:
-
-podman stop plex && podman rm plex
+If you are currently running Plex in Docker or a manual Podman container, stop and remove it first to prevent name conflicts.
 
 ### Step B: Set Permissions
 
 Add your user to the `video` and `render` groups to allow hardware access for Intel QuickSync:
 
-sudo usermod -aG video,render $USER
+`sudo usermod -aG video,render $USER`
 
 ### Step C: Identify User IDs
 
 Check your current User ID (UID) and Group ID (GID). Update the `PLEX_UID` and `PLEX_GID` values in the `.container` file if they are not 1000.
 
-id
+`id`
 
 ### Step D: Move and Edit
 
 Move the file to the systemd directory and edit your paths, timezone, and QSV settings:
 
-sudo mkdir -p /etc/containers/systemd
-sudo mv plex.container /etc/containers/systemd/
-sudo nano /etc/containers/systemd/plex.container
+`sudo mkdir -p /etc/containers/systemd`
+`sudo mv plex.container /etc/containers/systemd/`
+`sudo nano /etc/containers/systemd/plex.container` to edit it
 
 3\. Activation
 --------------
 
 Run these commands to trigger the Quadlet generator and start your server:
 
-sudo systemctl daemon-reload
-sudo systemctl start plex
-sudo systemctl enable plex
+`sudo systemctl daemon-reload`
+`sudo systemctl start plex`
 
 4\. Post-Install Verification
 -----------------------------
@@ -64,7 +61,7 @@ sudo systemctl enable plex
 
 To ensure Plex can see your Intel Graphics for QuickSync, run:
 
-podman exec -it plex ls -l /dev/dri
+`podman exec -it plex ls -l /dev/dri`
 
 You should see `card0` and `renderD128` in the output. Because we are using `UserNS=host`, you should see your actual username/group (or numeric IDs) rather than "nobody".
 
@@ -72,15 +69,15 @@ You should see `card0` and `renderD128` in the output. Because we are using `Use
 
 If the container isn't starting, use journalctl or podman logs to investigate:
 
-sudo journalctl -u plex -f
+`sudo journalctl -u plex -f`
 # OR
-sudo podman logs plex
+`sudo podman logs plex`
 
 5\. Updating the Container
 --------------------------
 
 Because `AutoUpdate=registry` is set, you can update the container (and all other System Quadlets) with a single command:
 
-sudo podman auto-update
+`sudo podman auto-update`
 
 _Note: Because this is a system quadlet, it will now start automatically on every system reboot._
